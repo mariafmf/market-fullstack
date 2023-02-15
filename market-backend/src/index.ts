@@ -6,6 +6,7 @@ import { getAllClients } from './endpoints/getAllClients';
 import { getAllProducts } from './endpoints/getAllProducts';
 import { createOrder } from './endpoints/createOrder';
 import { getStock } from './endpoints/getStock';
+import { AddressInfo } from 'net';
 
 const app = express()
 app.use(express.json())
@@ -18,6 +19,11 @@ app.get("/products", getAllProducts)
 app.get("/stock", getStock)
 app.post("/orders", createOrder)
 
-app.listen(3003, () => {
-    console.log("Server running on port 3003")
+const server = app.listen(process.env.PORT || 3003, () => {
+    if (server) {
+        const address = server.address() as AddressInfo;
+        console.log(`Server is running in http://localhost:${address.port}`)
+    } else {
+        console.error(`Failure upon starting server.`)
+    }
 })
