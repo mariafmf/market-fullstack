@@ -5,14 +5,15 @@ import { useForm } from "../../hooks/useForm";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { goToEndOrder } from "../../routers/Coordinator";
+import { BASE_URL } from "../../constants/constants";
 
 export default function Form({productsList, setProductsList}) {
     const navigate = useNavigate()
     const [showClient, setShowClient] = useState(false)
     const [formClient, onChangeClient, clearClient] = useForm({name: ""})
     const [formProducts, onChangeProducts, clearProducts] = useForm({name: "", quantity: 1, deliveryDate: ""})
-    const [dataClient, isLoadingClient, errorClient, upClient, setUpClient] = useRequestData("http://localhost:3003/clients")
-    const [dataProducts, isLoadingProducts, errorProducts] = useRequestData("http://localhost:3003/products")
+    const [dataClient, isLoadingClient, errorClient, upClient, setUpClient] = useRequestData(`${BASE_URL}/clients`)
+    const [dataProducts, isLoadingProducts, errorProducts] = useRequestData(`${BASE_URL}/products`)
     const [orderError, setOrderError] = useState("")
 
     // clientes
@@ -26,7 +27,7 @@ export default function Form({productsList, setProductsList}) {
     const selectedClient = dataClient && dataClient.find(client => client.name === formClient.name)
 
     const insertClient = () => {
-        axios.post("http://localhost:3003/clients", formClient, {
+        axios.post(`${BASE_URL}/clients`, formClient, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -85,7 +86,7 @@ export default function Form({productsList, setProductsList}) {
             products: productsListDB
         }
 
-        axios.post("http://localhost:3003/orders", body, {
+        axios.post(`${BASE_URL}/orders`, body, {
             headers: {
                 "Content-Type": "application/json"
             }
